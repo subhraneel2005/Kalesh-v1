@@ -5,15 +5,15 @@ import Link from 'next/link'
 function Login() {
   return (
     <div className='min-h-screen w-full flex flex-col justify-center items-center'>
-        <div className='w-[300px] h-[300px] md:w-[550px] md:h-[550px] py-7 px-4 flex justify-center items-center flex-col space-y-4 login'>
+        <div className='py-7 px-8 py-7 px-4 flex justify-center items-center flex-col space-y-4 login'>
             <h2 className='text-center text-3xl md:text-5xl text-slate-900'>Login</h2>
             <p className='text-[16px] text-slate-700'>Welcome back user👋</p>
-            <form className='mt-5 md:mt-14 w-full h-full'>
+            <form className='mt-5 md:mt-14 w-full h-full space-y-4'>
                 <div>
                     <label className='text-slate-900' htmlFor="email">Email</label>
                     <Input name='email' id='email' type='email' className='bg-slate-800'/>
                 </div>
-                <div className='mt-5'>
+                <div className=''>
                     <label className='text-slate-900' htmlFor="password">Password</label>
                     <Input name='password' id='password' type='password' className='bg-slate-800'/>
                 </div>
