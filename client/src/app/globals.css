@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -62,6 +64,27 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(180deg, #10002B 0%, #240046 51%, #3C096C 100%);
+    box-shadow: -32px 48px 12.1px -8px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    font-family: "Slackey", sans-serif;
+    font-weight: 400;
+    font-style: normal;
   }
 }
 
+body h1{
+background: linear-gradient(90deg, #EAE2B7 0%, #E8D257 36.2%, #EFCE12 66.87%, #7E6B00 99.13%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+}
+
+.btn{
+box-sizing: border-box;
+background: linear-gradient(90deg, #B27FE2 0%, #883ECE 100%);
+border: 1px solid #FFFFFF;
+box-shadow: -6px 6px 3.9px 3px rgba(0, 0, 0, 0.25);
+border-radius: 15px;
+}
