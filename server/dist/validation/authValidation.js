@@ -1,6 +1,6 @@
 import { z } from 'zod';
 export const registerSchema = z.object({
-    username: z.string({ message: "Name is required" })
+    name: z.string({ message: "Name is required" })
         .min(3, { message: "Name must be 3 chararcters long" }),
     email: z.string({ message: "Email is required" })
         .email({ message: "Please type a valid email😠" }),
