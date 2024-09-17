@@ -18,10 +18,10 @@ app.set("views", path.resolve(__dirname, "./views"));
 
 app.get("/", async(req:Request, res:Response) => {
     const html = await ejs.renderFile(__dirname + `/views/emails/welcome.ejs`, {
-        name: "Subraneel Goswami",
+        name: "Redis",
     });
     // await sendEmail("cobaja4295@asaud.com", "New Test", html);
-    await emailQueue.add(emailQueueName, {to:"cobaja4295@asaud.com", subject:"Test Email sent through Redis", body:html})
+    await emailQueue.add(emailQueueName, {to:"cobaja4295@asaud.com", subject:"Email successfull", body:html})
     return res.json({mesage: "Email send successfully"});
 })
 
