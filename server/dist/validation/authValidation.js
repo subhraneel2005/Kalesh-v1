@@ -12,3 +12,7 @@ export const registerSchema = z.object({
     .refine((data) => data.password === data.conform_password, {
     message: "Conform password didnt matched", path: ["conform_password"]
 });
+export const loginSchema = z.object({
+    email: z.string({ message: "Email is required" }).email({ message: "Email is not valid" }),
+    password: z.string({ message: "Password is required" })
+});

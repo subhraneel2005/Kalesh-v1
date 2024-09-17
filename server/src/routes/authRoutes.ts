@@ -1,5 +1,5 @@
 import {Router,Request, Response} from "express"
-import { registerSchema } from "../validation/authValidation.js";
+import { loginSchema, registerSchema } from "../validation/authValidation.js";
 import { ZodError } from "zod";
 import { formatError, renderEmailEJS } from "../helper.js";
 import prisma from "../config/database.js";
@@ -7,8 +7,64 @@ import bcrypt from "bcrypt"
 import {v4 as uuid4} from 'uuid'
 import { name } from "ejs";
 import { emailQueue, emailQueueName } from "../jobs/emailjob.js";
+import jwt from "jsonwebtoken"
 const router = Router()
 
+//Login Route
+router.post("/login", async(req: Request, res:Response) => {
+    try {
+      const body = req.body;
+      const payload =  loginSchema.parse(body);
+
+      //checking email in database
+      let user = await prisma.user.findUnique({
+        where:{
+            email:payload.email
+        }
+      });
+
+      if(!user || user === null){
+        return res.status(422).json({errors:{
+            email:"No user found with this email"
+        }})
+      };
+
+      //check password from db
+      const comparePassword = await bcrypt.compare(payload.password, user.password);
+
+      if(!comparePassword){
+        return res.status(422).json({errors:{
+            email:"Invalid Credentials"
+        }})
+      };
+
+
+      //JWT Payload 
+      let JWTPayload = {
+        id:user.id,
+        name:user.name,
+        email: user.email
+      }
+
+      const token = jwt.sign(JWTPayload, process.env.SECRET_KEY!, {expiresIn:"365d"});
+
+      JWTPayload
+      return res.json({
+        message:"Log in successfull",
+        data:{
+            ...JWTPayload,
+            token: `Bearer ${token}`
+        }
+      })
+
+    } catch (error) {
+        if(error instanceof ZodError){
+            const errors = formatError(error)
+            return res.status(422).json({message: "Invalid Data", errors});
+        }
+        return res.status(500).json({message: "Internal Server Error. Please try again later"});
+    }
+})
 
 //Register route
 router.post("/register", async(req:Request, res: Response) => {
@@ -51,8 +107,6 @@ router.post("/register", async(req:Request, res: Response) => {
         return res.json({message: "Please check your email for verification "});
 
     } catch (error) {
-        console.log("The error is", error);
-        
         if(error instanceof ZodError){
             const errors = formatError(error)
             return res.status(422).json({message: "Invalid Data", errors});
