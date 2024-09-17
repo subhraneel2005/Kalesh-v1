@@ -58,6 +58,44 @@ router.post("/login", async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error. Please try again later" });
     }
 });
+//Login checking
+router.post("/check/credentials", async (req, res) => {
+    try {
+        const body = req.body;
+        const payload = loginSchema.parse(body);
+        //checking email in database
+        let user = await prisma.user.findUnique({
+            where: {
+                email: payload.email
+            }
+        });
+        if (!user || user === null) {
+            return res.status(422).json({ errors: {
+                    email: "No user found with this email"
+                } });
+        }
+        ;
+        //check password from db
+        const comparePassword = await bcrypt.compare(payload.password, user.password);
+        if (!comparePassword) {
+            return res.status(422).json({ errors: {
+                    email: "Invalid Credentials"
+                } });
+        }
+        ;
+        return res.json({
+            message: "Log in successfull",
+            data: {}
+        });
+    }
+    catch (error) {
+        if (error instanceof ZodError) {
+            const errors = formatError(error);
+            return res.status(422).json({ message: "Invalid Data", errors });
+        }
+        return res.status(500).json({ message: "Internal Server Error. Please try again later" });
+    }
+});
 //Register route
 router.post("/register", async (req, res) => {
     try {
