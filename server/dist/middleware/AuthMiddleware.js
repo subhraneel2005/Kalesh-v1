@@ -14,5 +14,7 @@ const authMiddleware = (req, res, next) => {
             return res.status(401).json({ status: 401, message: "You are not authorised" });
         }
         req.user = user;
+        next();
     });
 };
+export default authMiddleware;
