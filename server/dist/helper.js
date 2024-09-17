@@ -3,8 +3,8 @@ import path from "path";
 import { fileURLToPath } from 'url';
 export const formatError = (error) => {
     let errors = {};
-    error.errors?.map((issues) => {
-        errors[issues.path?.[0]] = issues.message;
+    error.errors?.map((issue) => {
+        errors[issue.path?.[0]] = issue.message;
     });
     return errors;
 };

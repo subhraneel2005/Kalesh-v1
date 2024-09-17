@@ -51,6 +51,8 @@ router.post("/register", async(req:Request, res: Response) => {
         return res.json({message: "Please check your email for verification "});
 
     } catch (error) {
+        console.log("The error is", error);
+        
         if(error instanceof ZodError){
             const errors = formatError(error)
             return res.status(422).json({message: "Invalid Data", errors});

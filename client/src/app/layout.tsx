@@ -1,5 +1,6 @@
 
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "Kalesh-v1",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body>
+        <Toaster richColors position="top-right"/>
         {children}
       </body>
     </html>

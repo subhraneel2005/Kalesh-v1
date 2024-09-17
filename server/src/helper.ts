@@ -4,14 +4,14 @@ import path from "path";
 import {fileURLToPath} from 'url';
 
 export const formatError = (error: ZodError): any => {
-    let errors:any = {};
-    error.errors?.map((issues) =>{
-        errors[issues.path?.[0]] = issues.message;
+    let errors: any = {};
+    error.errors?.map((issue) => {
+      errors[issue.path?.[0]] = issue.message;
     });
-
+  
     return errors;
-
-};
+  };
+  
 
 export const renderEmailEJS = async (fileName:string, payload:any):Promise<string> => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
