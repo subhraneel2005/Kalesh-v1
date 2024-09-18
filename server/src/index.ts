@@ -2,8 +2,7 @@ import express, { Application,Response, Request } from "express";
 import "dotenv/config";
 import path from "path";
 import {fileURLToPath} from 'url';
-import ejs, { name } from 'ejs'
-import { sendEmail } from "./config/mail.js";
+import ejs from 'ejs';
 import Routes from "./routes/index.js"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app:Application = express();
@@ -11,6 +10,7 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
+app.use(appLimiter)
 
 //settig ejs viewEngine
 app.set("view engine", "ejs");
@@ -31,6 +31,7 @@ app.get("/", async(req:Request, res:Response) => {
 //Queues
 import "./jobs/index.js";
 import { emailQueue, emailQueueName } from "./jobs/emailjob.js";
+import { appLimiter } from "./config/rate-limit.js";
 
 app.listen(PORT, () => console.log(`Setavanga Server rumming on port = ${PORT}`)
 );

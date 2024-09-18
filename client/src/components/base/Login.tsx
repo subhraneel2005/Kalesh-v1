@@ -10,7 +10,7 @@ function Login() {
             <h2 className='text-center text-3xl md:text-5xl text-slate-900'>Login</h2>
             <p className='text-[16px] text-slate-700'>Welcome back user👋</p>
             <LoginForm/>
-            <Link href={'/forgetpassword'}><p className='text-[14px] text-blue-800 cursor-pointer hover:text-blue-900 duration-500 text-center'>Forgot Password?</p></Link>
+            <Link href={'/forget-password'}><p className='text-[14px] text-blue-800 cursor-pointer hover:text-blue-900 duration-500 text-center'>Forgot Password?</p></Link>
                     <p className='text-[14px] text-center mt-4 text-black'>Dont have an account?<Link href={'/register'}><span className='text-lg text-blue-800 cursor-pointer hover:text-blue-900 duration-500'>Register</span></Link></p>    
         </div>
     </div>
