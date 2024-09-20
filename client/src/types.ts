@@ -9,3 +9,13 @@ type KaleshFormTypeError = {
     expire_at?: string;
     image?: string;
 };
+
+type KaleshType = {
+    id: number;
+    user_id: number;
+    title: string;
+    decsription: string;
+    image:string;
+    created_at: string;
+    expire_at:string
+}

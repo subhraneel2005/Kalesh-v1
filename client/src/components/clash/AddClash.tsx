@@ -62,6 +62,7 @@ export default function AddClash({user}:{user:CustomUser}) {
             setClashData({});
             setDate(null);
             setImage(null);
+            setErrors({});
             toast.success("Kalesh added successfully 🎉");
             setOpen(false)
         }
