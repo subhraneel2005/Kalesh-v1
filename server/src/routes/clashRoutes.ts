@@ -13,6 +13,9 @@ router.get("/", async(req:Request, res:Response) => {
         const kalesh = await prisma.kalesh.findMany({
             where:{
                 user_id: req.user?.id!
+            },
+            orderBy:{
+                id: "desc"
             }
         })
 

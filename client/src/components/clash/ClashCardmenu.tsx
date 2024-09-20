@@ -10,6 +10,7 @@ import {
 import { EllipsisVertical } from 'lucide-react';
 import dynamic from "next/dynamic";
 import EditClash from './EditClash';
+import DeleteClash from './DeleteClash';
 
 const editKalesh = dynamic(() => import("./EditClash"))
   
@@ -17,6 +18,7 @@ const editKalesh = dynamic(() => import("./EditClash"))
 export default function ClashCardmenu({kalesh, token} : {kalesh:KaleshType, token:string}) {
 
     const [open, setOpen] = useState(false);
+    const [delOpen, setDelOpen] = useState(false);
 
   return (
     <>
@@ -27,6 +29,12 @@ export default function ClashCardmenu({kalesh, token} : {kalesh:KaleshType, toke
             </Suspense>
         )}
 
+        {delOpen && (
+            <Suspense fallback={<p>...Loading</p>}>
+                <DeleteClash open={delOpen} setOpen={setDelOpen} id={kalesh.id} token={token} />
+            </Suspense>
+        )}
+
         <DropdownMenu>
         <DropdownMenuTrigger>
             <EllipsisVertical/>
@@ -34,7 +42,7 @@ export default function ClashCardmenu({kalesh, token} : {kalesh:KaleshType, toke
         <DropdownMenuContent>
             <DropdownMenuItem onClick={() => setOpen(true)}>Edit</DropdownMenuItem>
             <DropdownMenuItem>Copy Link</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setDelOpen(true)}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
         </DropdownMenu>
 
