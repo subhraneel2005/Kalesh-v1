@@ -24,7 +24,8 @@ import axios, { AxiosError } from 'axios';
 import { KALESH_URL } from '@/lib/apiEndPoints';
 import { CustomUser } from '@/app/api/auth/[...nextauth]/options';
 import { toast } from 'sonner';
-import { clearCache } from '@/actions/commonActions';
+import { clearCache } from '@/app/actions/commonActions';
+
   
 
 export default function AddClash({user}:{user:CustomUser}) {

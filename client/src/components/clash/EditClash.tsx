@@ -23,7 +23,8 @@ import {
 import axios, { AxiosError } from 'axios';
 import { KALESH_URL } from '@/lib/apiEndPoints';
 import { toast } from 'sonner';
-import { clearCache } from '@/actions/commonActions';
+import { clearCache } from '@/app/actions/commonActions';
+
   
 
 export default function EditClash({token, kalesh,open, setOpen}:{token:string, kalesh:KaleshType, open:boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
