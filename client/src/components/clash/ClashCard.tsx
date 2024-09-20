@@ -11,15 +11,17 @@ import {
 import Image from 'next/image'
 import { getImgUrl } from '@/lib/utils'
 import { Button } from '../ui/button'
+import ClashCardmenu from './ClashCardmenu'
   
 
-export default function ClashCard({kalesh} : {kalesh: KaleshType}) {
+export default function ClashCard({kalesh, token} : {kalesh: KaleshType, token:string}) {
   return (
     <Card>
-    <CardHeader>
-        <CardTitle>Card Title</CardTitle>
+    <CardHeader className='flex justify-between items-center flex-row'>
+        <CardTitle>{kalesh.title}</CardTitle>
+        <ClashCardmenu kalesh={kalesh} token={token}/>
     </CardHeader>
-    <CardContent className='h-[300px]'>
+    <CardContent className='h-[300px] overflow-hidden'>
         {kalesh?.image && <Image 
         src={getImgUrl(kalesh.image)}
         width={500}

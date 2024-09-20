@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import React, {Dispatch, SetStateAction, useState} from 'react'
 import {
     Dialog,
     DialogContent,
@@ -22,16 +22,16 @@ import {
 } from "@/components/ui/popover"
 import axios, { AxiosError } from 'axios';
 import { KALESH_URL } from '@/lib/apiEndPoints';
-import { CustomUser } from '@/app/api/auth/[...nextauth]/options';
 import { toast } from 'sonner';
 import { clearCache } from '@/actions/commonActions';
   
 
-export default function AddClash({user}:{user:CustomUser}) {
-
-    const [open, setOpen] = useState(false);
-    const [clashData, setClashData] = useState<KaleshFormType>({});
-    const [date, setDate] = useState<Date | null>();
+export default function EditClash({token, kalesh,open, setOpen}:{token:string, kalesh:KaleshType, open:boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
+    const [clashData, setClashData] = useState<KaleshFormType>({
+        title: kalesh.title,
+        decsription: kalesh.decsription
+    });
+    const [date, setDate] = useState<Date | null>(new Date(kalesh.expire_at));
     const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<KaleshFormTypeError>({})
@@ -53,9 +53,9 @@ export default function AddClash({user}:{user:CustomUser}) {
         formData.append("expire_at", date?.toISOString() ?? "")
         if(image) formData.append("image", image);
 
-        const {data} = await axios.post(KALESH_URL, formData,{
+        const {data} = await axios.put(`${KALESH_URL}/${kalesh.id}`, formData,{
             headers:{
-                Authorization: user.token
+                Authorization: token
             },
         });
         setLoading(false);
@@ -65,7 +65,7 @@ export default function AddClash({user}:{user:CustomUser}) {
             setDate(null);
             setImage(null);
             setErrors({});
-            toast.success("Kalesh added successfully 🎉");
+            toast.success(data?.message);
             setOpen(false)
         }
        } catch (error) {
@@ -83,12 +83,9 @@ export default function AddClash({user}:{user:CustomUser}) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-            <Button>Add Item</Button>
-        </DialogTrigger>
     <DialogContent onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-        <DialogTitle>Create a Kalesh 😉</DialogTitle>
+        <DialogTitle>Edit this Kalesh</DialogTitle>
         </DialogHeader>
         <form onSubmit={submitHandler}>
             <div className='mt-4'>
@@ -142,7 +139,7 @@ export default function AddClash({user}:{user:CustomUser}) {
                     <Calendar
                     mode="single"
                     selected={date ??  new Date()}
-                    onSelect={setDate}
+                    onSelect={(date) => setDate(date!)}
                     initialFocus
                     />
                 </PopoverContent>
