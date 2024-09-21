@@ -19,3 +19,7 @@ type KaleshType = {
     created_at: string;
     expire_at:string
 }
+
+type KaleshItemForm = {
+    image: File | null;
+};
