@@ -21,12 +21,31 @@ model User {
 }
 
 model Kalesh {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id     Int
-  title       String
-  decsription String
-  image       String
-  expire_at   DateTime
-  created_at  DateTime @default(now())
+  id             Int              @id @default(autoincrement())
+  user           User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id        Int
+  title          String
+  decsription    String
+  image          String
+  expire_at      DateTime
+  created_at     DateTime         @default(now())
+  KaleshItem     KaleshItem[]
+  KaleshComments KaleshComments[]
+}
+
+model KaleshItem {
+  id         Int      @id @default(autoincrement())
+  kalesh     Kalesh   @relation(fields: [kalesh_id], references: [id], onDelete: Cascade)
+  kalesh_id  Int
+  image      String
+  count      Int      @default(0)
+  created_at DateTime @default(now())
+}
+
+model KaleshComments {
+  id         Int      @id @default(autoincrement())
+  kalesh     Kalesh   @relation(fields: [kalesh_id], references: [id], onDelete: Cascade)
+  kalesh_id  Int
+  comment    String
+  created_at DateTime @default(now())
 }
