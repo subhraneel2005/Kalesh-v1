@@ -35,6 +35,25 @@ router.get("/:id", async(req:Request, res:Response) => {
         const kalesh = await prisma.kalesh.findUnique({
             where:{
                id: Number(id)
+            },
+            include:{
+                KaleshItem:{
+                    select:{
+                        image:true,
+                        id:true,
+                        count: true
+                    }
+                },
+                KaleshComments:{
+                    select:{
+                        id:true,
+                        comment: true,
+                        created_at: true
+                    },
+                    orderBy:{
+                        id: "desc"
+                    }
+                }
             }
         })
 

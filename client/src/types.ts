@@ -17,9 +17,23 @@ type KaleshType = {
     decsription: string;
     image:string;
     created_at: string;
-    expire_at:string
+    expire_at:string;
+    KaleshItem:  Array<KaleshItem>;
+    KaleshComments: Array<KaleshComment>;
 }
 
 type KaleshItemForm = {
     image: File | null;
 };
+
+type KaleshItem = {
+    id: number;
+    count: number;
+    image: string;
+}
+
+type KaleshComment = {
+    id: number;
+    comment: string
+    created_at: number;
+}
