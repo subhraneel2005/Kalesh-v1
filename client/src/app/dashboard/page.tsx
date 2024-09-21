@@ -3,8 +3,9 @@ import AddClash from '@/components/clash/AddClash'
 import React from 'react'
 import { authOptions, CustomSession } from '../api/auth/[...nextauth]/options'
 import { getServerSession } from 'next-auth'
-import { fetchKaleshes } from '../fetch/kaleshFetch'
+
 import ClashCard from '@/components/clash/ClashCard'
+import { fetchKaleshes } from '@/fetch/kaleshFetch'
 
 export default async function dashboard() {
   const session:CustomSession | null = await getServerSession(authOptions);

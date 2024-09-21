@@ -10,6 +10,6 @@ const router = Router();
 router.use("/api/auth", AuthRoutes)
 router.use("/api/auth", PasswordRoutes)
 router.use("/", VerifyRoutes)
-router.use("/api/kalesh", authMiddleware, KaleshRoutes)
+router.use("/api/kalesh", KaleshRoutes)
 
 export default router;

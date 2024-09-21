@@ -3,8 +3,9 @@ import { ZodError } from "zod";
 import { formatError, imageValidator, removeImage, uploadImage } from "../helper.js";
 import { kaleshSchema } from "../validation/kaleshVaidation.js";
 import prisma from "../config/database.js";
+import authMiddleware from "../middleware/AuthMiddleware.js";
 const router = Router();
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const kalesh = await prisma.kalesh.findMany({
             where: {
@@ -40,7 +41,7 @@ router.get("/:id", async (req, res) => {
         return res.status(500).json({ message: "Something went wrong. Try again later" });
     }
 });
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         const body = req.body;
         const payload = kaleshSchema.parse(body);
@@ -80,7 +81,7 @@ router.post("/", async (req, res) => {
         }
     }
 });
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         const body = req.body;
@@ -129,7 +130,7 @@ router.put("/:id", async (req, res) => {
         }
     }
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         //get oldImage and delete
@@ -162,5 +163,8 @@ router.delete("/:id", async (req, res) => {
                 .json({ error: "Something went wrong.please try again!", data: error });
         }
     }
+});
+//kalesh item routes
+router.post("/items", authMiddleware, async (req, res) => {
 });
 export default router;

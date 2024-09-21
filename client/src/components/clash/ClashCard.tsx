@@ -12,6 +12,7 @@ import Image from 'next/image'
 import { getImgUrl } from '@/lib/utils'
 import { Button } from '../ui/button'
 import ClashCardmenu from './ClashCardmenu'
+import Link from 'next/link'
   
 
 export default function ClashCard({kalesh, token} : {kalesh: KaleshType, token:string}) {
@@ -35,7 +36,9 @@ export default function ClashCard({kalesh, token} : {kalesh: KaleshType, token:s
         </p>
     </CardContent>
     <CardFooter>
-        <Button>Items</Button>
+        <Link href={`/clash/items/${kalesh.id}`}>
+            <Button>Items</Button>
+        </Link>
     </CardFooter>
     </Card>
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -68,7 +68,7 @@
     background: linear-gradient(180deg, #10002B 0%, #240046 51%, #3C096C 100%);
     box-shadow: -32px 48px 12.1px -8px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    font-family: "Slackey", sans-serif;
+    font-family: "Krona One", sans-serif;
     font-weight: 400;
     font-style: normal;
   }

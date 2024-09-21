@@ -8,7 +8,7 @@ import authMiddleware from "../middleware/AuthMiddleware.js";
 
 const router = Router();
 
-router.get("/", async(req:Request, res:Response) => {
+router.get("/", authMiddleware, async(req:Request, res:Response) => {
     try {
         const kalesh = await prisma.kalesh.findMany({
             where:{
@@ -48,7 +48,7 @@ router.get("/:id", async(req:Request, res:Response) => {
     }
 })
 
-router.post("/", async(req:Request, res:Response) => {
+router.post("/", authMiddleware, async(req:Request, res:Response) => {
     try {
         const body = req.body;
         const payload = kaleshSchema.parse(body);
@@ -94,7 +94,7 @@ router.post("/", async(req:Request, res:Response) => {
     }
 })
 
-router.put("/:id", async(req:Request, res:Response) => {
+router.put("/:id",authMiddleware, async(req:Request, res:Response) => {
     try {
         const {id} = req.params;
         const body = req.body;
@@ -150,7 +150,7 @@ router.put("/:id", async(req:Request, res:Response) => {
     }
 })
 
-router.delete("/:id", async(req:Request, res:Response) => {
+router.delete("/:id",authMiddleware, async(req:Request, res:Response) => {
     try {
         const {id} = req.params;
        //get oldImage and delete
@@ -184,6 +184,11 @@ router.delete("/:id", async(req:Request, res:Response) => {
               .json({ error: "Something went wrong.please try again!", data: error });
           }
     }
+})
+
+//kalesh item routes
+router.post("/items",authMiddleware, async(req: Request, res: Response) => {
+    
 })
 
 export default router;
