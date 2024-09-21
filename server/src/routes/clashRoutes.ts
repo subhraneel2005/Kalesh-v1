@@ -2,7 +2,7 @@ import { Router,Request,Response } from "express";
 import { ZodError } from "zod";
 import { formatError, imageValidator, removeImage, uploadImage } from "../helper.js";
 import { kaleshSchema } from "../validation/kaleshVaidation.js";
-import { UploadedFile } from "express-fileupload";
+import { FileArray, UploadedFile } from "express-fileupload";
 import prisma from "../config/database.js";
 import authMiddleware from "../middleware/AuthMiddleware.js";
 
@@ -188,7 +188,46 @@ router.delete("/:id",authMiddleware, async(req:Request, res:Response) => {
 
 //kalesh item routes
 router.post("/items",authMiddleware, async(req: Request, res: Response) => {
-    
+    const {id} = req.body;
+    const files:FileArray | null | undefined = req.files;
+
+    let imgErrors:Array<string> = [];
+    const images = files?.["images[]"] as UploadedFile[];
+
+    if(images.length >= 2) {
+        //check validations
+        images.map((img) => {
+            const validMsg = imageValidator(img?.size, img?.mimetype)
+            if(validMsg){
+                imgErrors.push(validMsg);
+            }
+        });
+        
+
+        if(imgErrors.length > 0){
+            return res.status(422).json({errors: imgErrors});
+        }
+
+        //uplaoding imgaes to items
+        let uploadedImgs:string[] = [];
+
+        images.map((img) => {
+            uploadedImgs.push(uploadImage(img))
+        })
+
+        uploadedImgs.map(async(item) => {
+            await prisma.kaleshItem.create({
+                data:{
+                    image: item,
+                    kalesh_id: Number(id)
+                },
+            });
+        })
+
+        return res.json({message: "Kalesh Items added successfully 🎉"});
+    }
+
+    return res.status(422).json({errors: ["Please select at least two images for Kaleshing."]})
 })
 
 export default router;

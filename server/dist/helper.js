@@ -38,7 +38,7 @@ export const bytesToMb = (bytes) => {
 export const generateRandomNum = () => {
     return uuidv4();
 };
-export const uploadImage = async (image) => {
+export const uploadImage = (image) => {
     const imgExt = image?.name.split(".");
     const imageName = uuidv4() + "." + imgExt[1];
     const uploadPath = process.cwd() + "/public/images/" + imageName;

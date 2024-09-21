@@ -52,7 +52,7 @@ export const generateRandomNum = () => {
   return uuidv4();
 };
 
-export const uploadImage = async (image: UploadedFile) => {
+export const uploadImage = (image: UploadedFile) => {
   const imgExt = image?.name.split(".");
   const imageName = uuidv4() + "." + imgExt[1];
   const uploadPath = process.cwd() + "/public/images/" + imageName;
