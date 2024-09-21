@@ -7,3 +7,4 @@ export const CHECK_CERDENTIALS_URL = `http://localhost:8000/api/auth/check/crede
 export const FORGET_PASSWORD_URL= `${BASE_URL}/auth/forget-password`;
 export const RESET_PASSWORD_URL= `${BASE_URL}/auth/reset-password`;
 export const KALESH_URL = `${BASE_URL}/kalesh`;
+export const KALESH_ITEMS_URL = `${BASE_URL}/kalesh/items`;

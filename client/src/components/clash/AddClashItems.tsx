@@ -4,8 +4,15 @@ import { Upload } from 'lucide-react'
 import React, {useState, useRef, ChangeEvent} from 'react'
 import { Button } from '../ui/button'
 import Image from 'next/image';
+import axios, { AxiosError } from 'axios';
+import { KALESH_ITEMS_URL } from '@/lib/apiEndPoints';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 
 export default function AddClashItems({token, kaleshId}: {token: string, kaleshId: number}) {
+
+    const router = useRouter();
 
     const [items, setItems] = useState<Array<KaleshItemForm>>([
         {image: null},
@@ -15,6 +22,7 @@ export default function AddClashItems({token, kaleshId}: {token: string, kaleshI
 
     const imgRef1 = useRef<HTMLInputElement | null>(null);
     const imgRef2 = useRef<HTMLInputElement | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleImgChange = (e: ChangeEvent<HTMLInputElement>, index:number) => {
         const file = e.target.files?.[0]
@@ -29,6 +37,50 @@ export default function AddClashItems({token, kaleshId}: {token: string, kaleshI
             setUrls(updatedURLs);
         }
     }
+
+    const handleSubmit  = async() => {
+        try {
+            const formData = new FormData();
+            formData.append('id', kaleshId.toString())
+            items.map((item) =>  {
+                if(item.image) {
+                    formData.append(`images[]`, item.image)
+                }
+            })
+
+            if(formData.get("images[]")){
+                setLoading(true);
+                const {data} = await axios.post(KALESH_ITEMS_URL, formData, {
+                    headers:{
+                        Authorization: token
+                    }
+                });
+
+                if(data?.message){
+                    toast.success(data.message);
+                    setTimeout(() => {
+                        router.push("/dashboard")
+                    }, 1000)
+                }
+                setLoading(false);
+            }else{
+                toast.warning("Please upload both the images 😠!");
+            }
+
+        } catch (error) {
+            setLoading(false);
+            if(error instanceof AxiosError){
+                if(error.response?.status === 422){
+                    if(error.response?.data?.errors){
+                        error.response?.data?.errors?.map((err: string) => toast.error(err))
+                    }
+                }
+            }
+            else{
+                toast.error("Something went wrong");
+            }
+        }
+    } 
 
   return (
     <div className='mt-10'>
@@ -91,7 +143,9 @@ export default function AddClashItems({token, kaleshId}: {token: string, kaleshI
         </div>
 
         <div className='text-center'>
-            <Button className='w-52 mt-4'>Submit</Button>
+            <Button 
+            onClick={handleSubmit} disabled={loading}
+            className='w-52 mt-4'>{loading ? "Processing..." : "Submit"}</Button>
         </div>
     </div>
   )
