@@ -2,13 +2,16 @@
 
 import { getImgUrl } from '@/lib/utils'
 import Image from 'next/image'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
+
+    const [kaleshComments, setKaleshComments] = useState(kalesh.KaleshComments);
+    const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem)
   return (
     <div className='mt-10'>
         <div className='flex flex-wrap lg:flex-nowrap justify-between items-center'>
-            {kalesh.KaleshItem && kalesh.KaleshItem.length > 0 && kalesh.KaleshItem.map((item, index) => {
+            {kaleshItems && kaleshItems.length > 0 && kaleshItems.map((item, index) => {
                 return(
                     <Fragment key={index}>
                         <div className='w-full lg:w-[500px] flex justify-center items-center flex-col'>
@@ -31,6 +34,19 @@ export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
                 )
             } )}
         </div>
+
+        {/* Kalesh Comments Box */}
+        <div className='mt-4'>
+            {kaleshComments && kaleshComments.length > 0 && kaleshComments.map((item, index) => (
+                <div key={index} className='w-full md:w-[600px] rounded-lg p-4 bg-muted mb-4'>
+                    <p className='font-bold'>{item.comment}</p>
+                    <p>{new Date(item.created_at).toDateString()}</p>
+                </div>
+            ))}
+        </div>
     </div>
   )
 }
+
+
+// Props are unchangable
