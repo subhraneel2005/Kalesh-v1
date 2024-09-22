@@ -20,9 +20,21 @@ export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
         setKaleshItems(items);
     };
 
+    const updateComments = (payload:any) => {
+        if(kaleshComments && kaleshComments.length > 0 ){
+            setKaleshComments([payload, ...kaleshComments]);
+        }
+        else{
+            setKaleshComments([payload])
+        }
+    }
+
     useEffect(() => {
         socket.on(`clashing-${kalesh.id}`, (data) => {
             updateCounter(data?.kaleshItemId)
+        });
+        socket.on(`clashing_comment-${kalesh.id}`, (data) => {
+            updateComments(data);
         })
     },[]);
 

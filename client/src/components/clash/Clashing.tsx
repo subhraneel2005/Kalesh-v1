@@ -8,6 +8,7 @@ import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 import { ThumbsUp } from 'lucide-react'
 import socket from '@/lib/socket'
+import { toast } from 'sonner'
 
 export default function Clashing({kalesh} :{kalesh: KaleshType}) {
 
@@ -38,9 +39,37 @@ export default function Clashing({kalesh} :{kalesh: KaleshType}) {
         setKaleshItems(items);
     };
 
+    const updateComments = (payload:any) => {
+        if(kaleshComments && kaleshComments.length > 0 ){
+            setKaleshComments([payload, ...kaleshComments]);
+        }
+        else{
+            setKaleshComments([payload])
+        }
+    }
+
+    const handleSubmit = (e:React.FormEvent) => {
+        e.preventDefault();
+        if(comment.length > 2) {
+            const payload = {
+                id: kalesh.id,
+                comment: comment,
+                created_at: new Date().toDateString()
+            }
+            socket.emit(`clashing_comment-${kalesh.id}`, payload);
+            updateComments(payload);
+            setComment("");
+        }else{
+            toast.warning("Please type at least 2 words")
+        }
+    }
+
     useEffect(() => {
         socket.on(`clashing-${kalesh.id}`, (data) => {
-            updateCounter(data?.kaleshItemId)
+            updateCounter(data?.kaleshItemId);
+        });
+        socket.on(`clashing_comment-${kalesh.id}`, (data) => {
+            updateComments(data);
         })
     },[])
 
@@ -84,7 +113,7 @@ export default function Clashing({kalesh} :{kalesh: KaleshType}) {
             } )}
         </div>
 
-        <form className='mt-6 w-full'>
+        <form className='mt-6 w-full' onSubmit={handleSubmit}>
             <Textarea className='bg-black' placeholder='type your suggestion 😃' value={comment} onChange={(e) => setComment(e.target.value)}/>
                 <Button className='w-full mt-2'>Submit Comment</Button>
         </form>
