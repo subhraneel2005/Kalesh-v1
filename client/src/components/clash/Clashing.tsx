@@ -4,11 +4,14 @@ import { getImgUrl } from '@/lib/utils'
 import CountUp from "react-countup"
 import Image from 'next/image'
 import React, { Fragment, useState } from 'react'
+import { Textarea } from '../ui/textarea'
+import { Button } from '../ui/button'
 
-export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
+export default function Clashing({kalesh} :{kalesh: KaleshType}) {
 
     const [kaleshComments, setKaleshComments] = useState(kalesh.KaleshComments);
-    const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem)
+    const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem);
+    const [comment, setComment] = useState("")
   return (
     <div className='mt-10'>
         <div className='flex flex-wrap lg:flex-nowrap justify-between items-center'>
@@ -41,6 +44,11 @@ export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
                 )
             } )}
         </div>
+
+        <form className='mt-6 w-full'>
+            <Textarea className='bg-black' placeholder='type your suggestion 😃' value={comment} onChange={(e) => setComment(e.target.value)}/>
+                <Button className='w-full mt-2'>Submit Comment</Button>
+        </form>
 
         {/* Kalesh Comments Box */}
         <div className='mt-4'>
