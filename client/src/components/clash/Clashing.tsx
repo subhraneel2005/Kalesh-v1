@@ -3,7 +3,7 @@
 import { getImgUrl } from '@/lib/utils'
 import CountUp from "react-countup"
 import Image from 'next/image'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 import { ThumbsUp } from 'lucide-react'
@@ -36,7 +36,13 @@ export default function Clashing({kalesh} :{kalesh: KaleshType}) {
             items[findIndex].count += 1;
         }
         setKaleshItems(items);
-    }
+    };
+
+    useEffect(() => {
+        socket.on(`clashing-${kalesh.id}`, (data) => {
+            updateCounter(data?.kaleshItemId)
+        })
+    },[])
 
   return (
     <div className='mt-10'>

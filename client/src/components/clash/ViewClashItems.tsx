@@ -3,12 +3,29 @@
 import { getImgUrl } from '@/lib/utils'
 import CountUp from "react-countup"
 import Image from 'next/image'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
+import socket from '@/lib/socket'
 
 export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
 
     const [kaleshComments, setKaleshComments] = useState(kalesh.KaleshComments);
-    const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem)
+    const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem);
+
+    const updateCounter = (id:number) => {
+        const items = [...kaleshItems];
+        const findIndex = kaleshItems.findIndex((item) => item.id === id);
+        if(findIndex !== -1){
+            items[findIndex].count += 1;
+        }
+        setKaleshItems(items);
+    };
+
+    useEffect(() => {
+        socket.on(`clashing-${kalesh.id}`, (data) => {
+            updateCounter(data?.kaleshItemId)
+        })
+    },[]);
+
   return (
     <div className='mt-10'>
         <div className='flex flex-wrap lg:flex-nowrap justify-between items-center'>
@@ -28,7 +45,7 @@ export default function ViewClashItems({kalesh} :{kalesh: KaleshType}) {
 
                         <CountUp
                         start={0}
-                        end={100}
+                        end={item.count}
                         duration={1.5}
                         className='text-5xl font-extrabold text-gray-200'/>
                     </div>

@@ -1,4 +1,5 @@
 import {Server} from "socket.io";
+import { votingQueue, votingQueueName } from "./jobs/VotingJob.js";
 export function setupSocket(io:Server){
     io.on("connection", (socket) => {
         console.log("A user is now  connected", socket.id);
@@ -8,10 +9,11 @@ export function setupSocket(io:Server){
         });
 
         //litsen
-        socket.onAny((eventName:string, data:any) => {
+        socket.onAny(async(eventName:string, data:any) => {
             if(eventName.startsWith("clashing-")){
                 console.log("The vote data is = ", data);
-                
+                await votingQueue.add(votingQueueName, data);
+                socket.broadcast.emit(`clashing-${data?.kaleshId}`, data)
             }
         })
     });

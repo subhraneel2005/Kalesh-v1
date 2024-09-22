@@ -1,3 +1,4 @@
+import { votingQueue, votingQueueName } from "./jobs/VotingJob.js";
 export function setupSocket(io) {
     io.on("connection", (socket) => {
         console.log("A user is now  connected", socket.id);
@@ -5,9 +6,11 @@ export function setupSocket(io) {
             console.log("A user has disconnected");
         });
         //litsen
-        socket.onAny((eventName, data) => {
+        socket.onAny(async (eventName, data) => {
             if (eventName.startsWith("clashing-")) {
                 console.log("The vote data is = ", data);
+                await votingQueue.add(votingQueueName, data);
+                socket.broadcast.emit(`clashing-${data?.kaleshId}`, data);
             }
         });
     });
