@@ -5,9 +5,19 @@ import { fileURLToPath } from 'url';
 import ejs from 'ejs';
 import cors from "cors";
 import Routes from "./routes/index.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
 import fileUpload from "express-fileupload";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CLIENT_APP_URL
+    }
+});
+export { io };
+setupSocket(io);
 const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cors());
@@ -35,4 +45,5 @@ app.get("/", async (req, res) => {
 import "./jobs/index.js";
 import { emailQueue, emailQueueName } from "./jobs/emailjob.js";
 import { appLimiter } from "./config/rate-limit.js";
-app.listen(PORT, () => console.log(`Setavanga Server rumming on port = ${PORT}`));
+import { setupSocket } from "./socket.js";
+server.listen(PORT, () => console.log(`Setavanga Server rumming on port = ${PORT}`));

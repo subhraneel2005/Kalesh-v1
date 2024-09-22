@@ -6,12 +6,38 @@ import Image from 'next/image'
 import React, { Fragment, useState } from 'react'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
+import { ThumbsUp } from 'lucide-react'
+import socket from '@/lib/socket'
 
 export default function Clashing({kalesh} :{kalesh: KaleshType}) {
 
     const [kaleshComments, setKaleshComments] = useState(kalesh.KaleshComments);
     const [kaleshItems, setKaleshItems] = useState(kalesh.KaleshItem);
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState("");
+    const [hideVote, setHideVote] = useState(false);
+
+    const handleVote = (id:number) => {
+        if(kaleshItems && kaleshItems.length > 0){
+            setHideVote(true);
+            updateCounter(id);
+
+            //socket litsen
+            socket.emit(`clashing-${kalesh.id}`, {
+                kaleshId: kalesh.id,
+                kaleshItemId: id
+            })
+        }
+    }
+
+    const updateCounter = (id:number) => {
+        const items = [...kaleshItems];
+        const findIndex = kaleshItems.findIndex((item) => item.id === id);
+        if(findIndex !== -1){
+            items[findIndex].count += 1;
+        }
+        setKaleshItems(items);
+    }
+
   return (
     <div className='mt-10'>
         <div className='flex flex-wrap lg:flex-nowrap justify-between items-center'>
@@ -29,11 +55,18 @@ export default function Clashing({kalesh} :{kalesh: KaleshType}) {
                             className='w-full h-[300px] object-contain'/> 
                         </div>
 
+                        {hideVote ?
                         <CountUp
                         start={0}
-                        end={100}
+                        end={item.count}
                         duration={1.5}
-                        className='text-5xl font-extrabold text-gray-200'/>
+                        className='text-5xl font-extrabold text-gray-200'/> :
+                        <Button
+                        onClick={() => handleVote(item.id)} className='mt-4'>
+                            <span className='mr-2 text-lg'>Vote</span>
+                            <ThumbsUp/>
+                        </Button> }
+                            
                     </div>
 
                     {/*VS block*/}
