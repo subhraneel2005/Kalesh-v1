@@ -1,6 +1,6 @@
 export const redisConenction = {
     host: process.env.REDIS_HOST,
-    port: 6379,
+    port: 6379
 };
 export const deafultQueueOptions = {
     removeOnComplete: {
