@@ -7,26 +7,25 @@ import { registerAction } from '@/app/actions/authActions';
 import {useFormState} from "react-dom"
 import {SubmitButton} from "../commons/SubmitBtn"
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 function RegisterForm() {
 
-    const initState = {
-        status: 0,
-        message: "",
-        errors: {},
-    };
+    const router = useRouter();
+  const initialState = {
+    message: "",
+    status: 0,
+    errors: {},
+  };
+  const [state, formAction] = useFormState(registerAction, initialState);
 
-    const [state, formAction] = useFormState(registerAction, initState);
-
-    useEffect(() => {
-        if(state.status === 500){
-            toast.error(state.message)
-        }
-        else if(state.status === 200){
-            toast.success(state.message)
-        }
-       
-    }, [state])
+  useEffect(() => {
+    if (state.status === 404) {
+      toast.error(state.message);
+    } else if (state.status === 200) {
+      toast.success(state.message);
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className='mt-5 md:mt-14 w-full h-full space-y-4'>

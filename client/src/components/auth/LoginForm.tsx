@@ -9,30 +9,27 @@ import { toast } from 'sonner';
 import {signIn} from 'next-auth/react'
 
 function LoginForm() {
-    const initState = {
-        status: 0,
+    const initialState = {
         message: "",
+        status: 0,
         errors: {},
-        data:{}
-    };
-
-    const [state, formAction] = useFormState(loginAction, initState);
-
-    useEffect(() => {
-        if(state.status === 500){
-            toast.error(state.message)
+        data: {},
+      };
+      const [state, formAction] = useFormState(loginAction, initialState);
+    
+      useEffect(() => {
+        if (state.status === 500) {
+          toast.error(state.message);
+        } else if (state.status === 200) {
+          toast.success(state.message);
+          signIn("credentials", {
+            email: state.data?.email,
+            password: state.data?.password,
+            redirect: true,
+            callbackUrl: "/dashboard",
+          });
         }
-        else if(state.status === 200){
-            toast.success(state.message)
-            signIn("credentials", {
-                email:state.data.email,
-                password:state.data.password,
-                redirect: true,
-                callbackUrl: "/dashboard"
-            })
-        }
-       
-    }, [state])
+      }, [state]);
   return (
     <form action={formAction} className='mt-5 md:mt-14 w-full h-full space-y-4'>
         <div>
